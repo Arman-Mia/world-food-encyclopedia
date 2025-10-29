@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>World Food Encyclopedia — 1000+ Foods</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- jsPDF & autoTable (for PDF export) -->
+  <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">WF</div>
+        <div>
+          <h1>World Food Encyclopedia</h1>
+          <p class="tag">Nutrition • Benefits • Side effects • Best time • Frequency</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search-wrap">
+          <input id="search" class="search-input" type="search" placeholder="Search foods, nutrients, benefits..." />
+          <svg class="search-anim" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.4" fill="none"/>
+            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+
+        <div class="top-actions">
+          <button id="toggleTheme" class="btn">Dark</button>
+          <button id="seeMoreDownload" class="btn primary">See More Foods / Download PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="sidebar">
+        <div class="panel">
+          <h3>Categories</h3>
+          <div id="categories" class="categories"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Filters</h3>
+          <label><input id="lowCal" type="checkbox"> Low calorie (&lt;100 kcal/100g)</label><br>
+          <label><input id="highProtein" type="checkbox"> High protein (&gt;10g/100g)</label><br>
+          <label><input id="veganOnly" type="checkbox"> Vegan</label>
+        </div>
+
+        <div class="panel">
+          <h3>Sort</h3>
+          <select id="sort">
+            <option value="relevance">Relevance</option>
+            <option value="name">Name A–Z</option>
+            <option value="calories">Calories ↑</option>
+            <option value="freq">Frequency (weekly)</option>
+          </select>
+        </div>
+
+        <div class="panel about-compact">
+          <h3>About</h3>
+          <p class="small">World Food Encyclopedia — searchable nutritional guide with benefits, side effects, best times to eat and recommended frequency.</p>
+          <a id="aboutLink" href="#about" class="link">Learn more</a>
+        </div>
+
+      </aside>
+
+      <section class="content">
+        <div class="meta-row">
+          <div id="resultCount" class="result-count"></div>
+          <div class="small-note">Click a card to view details. PDF includes the full dataset (1000+ items).</div>
+        </div>
+
+        <div id="grid" class="grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>© <span id="year"></span> World Food Encyclopedia • Built by Arman Mia</div>
+      <div class="footer-right">Food Dataset: • 1000+ items</div>
+    </footer>
+
+    <!-- Details drawer -->
+    <div id="drawer" class="drawer" aria-hidden="true">
+      <div class="drawer-inner">
+        <button id="closeDrawer" class="close">✕</button>
+        <h2 id="dTitle">Food Name</h2>
+        <div class="drawer-grid">
+          <div class="d-left">
+            <p class="pill" id="dCategory"></p>
+            <h4>Nutrients</h4>
+            <div id="dNutrients" class="nutrients"></div>
+            <h4>Benefits</h4>
+            <p id="dBenefits"></p>
+            <h4>Side effects</h4>
+            <p id="dSide"></p>
+          </div>
+          <div class="d-right">
+            <div class="meta-row-vert">
+              <div><strong>Best time:</strong> <span id="dTime"></span></div>
+              <div><strong>Frequency:</strong> <span id="dFreq"></span></div>
+              <div><strong>Calories (100g):</strong> <span id="dCal"></span></div>
+              <div><strong>Protein:</strong> <span id="dProtein"></span> g</div>
+              <div><strong>Usage:</strong> <span id="dUse"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Page (modal-style) -->
+    <div id="pageAbout" class="page-modal" aria-hidden="true">
+      <div class="page-inner">
+        <button class="close-page" id="closeAbout">✕</button>
+        <h2>About the World Food Encyclopedia</h2>
+        <p>This project is a client-side, searchable database of common foods around the world. Each entry contains nutritional highlights, benefits, side effects, recommended best times to eat, and suggested frequency. The dataset is embedded for offline use and export as PDF.</p>
+        <p>Built by <strong>Arman Mia</strong>.</p>
+        <p><a href="https://www.linkedin.com/in/arman-mia-940aa6254/" target="_blank" rel="noopener">LinkedIn (Arman Mia)</a> • <a href="mailto:armanmia1305@gmail.com">armanmia1305@gmail.com</a></p>
+      </div>
+    </div>
+
+    <!-- Contact Page (modal-style) -->
+    <div id="pageContact" class="page-modal" aria-hidden="true">
+      <div class="page-inner">
+        <button class="close-page" id="closeContact">✕</button>
+        <h2>Contact</h2>
+        <p>If you want to reach me:</p>
+        <ul>
+          <li>LinkedIn: <a href="https://www.linkedin.com/in/arman-mia-940aa6254/" target="_blank" rel="noopener">https://www.linkedin.com/in/arman-mia-940aa6254/</a></li>
+          <li>Email: <a href="mailto:armanmia1305@gmail.com">armanmia1305@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
